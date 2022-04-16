@@ -82,11 +82,14 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "drf_spectacular",
+    "django_filters",
 ]
 
 LOCAL_APPS = [
     "todoomatic.users",
     # Your stuff: custom apps go here
+    "todoomatic.boards",
+    "todoomatic.tasks",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -286,6 +289,7 @@ SOCIALACCOUNT_FORMS = {"signup": "todoomatic.users.forms.UserSocialSignupForm"}
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ),
@@ -310,3 +314,6 @@ SPECTACULAR_SETTINGS = {
 }
 # Your stuff...
 # ------------------------------------------------------------------------------
+JWT_AUTH = {
+    "JWT_RESPONSE_PAYLOAD_HANDLER": "todoomatic.utils.jwt_response_handler.jwt_response_handler"
+}
