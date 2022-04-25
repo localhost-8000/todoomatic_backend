@@ -1,6 +1,7 @@
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+from todoomatic.boards.models import Board
 
 from todoomatic.tasks.models import AssignTask, Task
 from todoomatic.tasks.serializers import AssignTaskSerializer, TaskSerializer
@@ -18,7 +19,8 @@ class TaskViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         board_id = self.kwargs["board_id"]
-        serializer.save(board=board_id)
+        board = Board.objects.get(pk=board_id)
+        serializer.save(board=board)
 
     def perform_destroy(self, instance):
         instance.deleted = True

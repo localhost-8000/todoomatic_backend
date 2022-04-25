@@ -1,4 +1,4 @@
-from operator import truediv
+
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
@@ -34,4 +34,16 @@ class UserSerializerWithToken(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['token', 'username', 'password']
+        fields = ['token', 'username', 'password', 'photoURL', 'name']
+
+class CreateUserSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = User 
+        fields = ['username', 'password', 'name', 'photoURL']
+
+    def validate_name(self, value):
+        if len(value) < 3 or len(value) > 100:
+            raise serializers.ValidationError("Name must be between 3 and 100 characters")
+
+        return value
