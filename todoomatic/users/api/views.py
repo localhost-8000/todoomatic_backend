@@ -1,7 +1,7 @@
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from rest_framework import permissions, status, mixins
+from rest_framework import permissions, status
 from rest_framework.decorators import action, api_view
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.response import Response
@@ -53,6 +53,7 @@ class CreateUser(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = CreateUserSerializer
     permission_classes = [permissions.AllowAny]
+    authentication_classes = []
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
