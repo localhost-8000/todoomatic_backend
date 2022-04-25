@@ -15,7 +15,7 @@ class TaskViewSet(ModelViewSet):
 
     def get_queryset(self):
         board_id = self.kwargs["board_id"]
-        return Task.objects.filter(pk=board_id)
+        return Task.objects.filter(board__pk=board_id, deleted=False)
 
     def perform_create(self, serializer):
         board_id = self.kwargs["board_id"]
