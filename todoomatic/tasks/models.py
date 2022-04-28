@@ -8,7 +8,7 @@ User = get_user_model()
 
 STATUS_CHOICES = (
     ("Pending", "Pending"),
-    ("In progress", "In Progress"),
+    ("In Progress", "In Progress"),
     ("Done", "Done"),
     ("Cancelled", "Cancelled"),
 )

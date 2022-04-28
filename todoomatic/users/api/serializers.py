@@ -2,6 +2,8 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
+
+from todoomatic.tasks.models import Task
 User = get_user_model()
 
 
@@ -47,3 +49,10 @@ class CreateUserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Name must be between 3 and 100 characters")
 
         return value
+
+
+class MinimalTaskSerializer(serializers.ModelSerializer):
+
+    class Meta: 
+        model = Task
+        fields = ["id", "title", "status", "priority"]

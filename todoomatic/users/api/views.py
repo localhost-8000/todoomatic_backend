@@ -10,7 +10,9 @@ from rest_framework.viewsets import GenericViewSet, ModelViewSet
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 
-from .serializers import CreateUserSerializer, UserSerializer, UserSerializerWithToken
+from todoomatic.tasks.models import AssignTask, Task
+
+from .serializers import CreateUserSerializer, MinimalTaskSerializer, UserSerializer, UserSerializerWithToken
 
 User = get_user_model()
 
@@ -28,6 +30,31 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericV
     def me(self, request):
         serializer = UserSerializer(request.user, context={"request": request})
         return Response(status=status.HTTP_200_OK, data=serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def tasks(self, request):
+        user_tasks = AssignTask.objects.filter(user=request.user, deleted=False)
+        pending_task_ids = []
+        progress_task_ids = []
+        done_task_ids = []
+        for task in user_tasks:
+            if task.task.status == 'Pending':
+                pending_task_ids.append(task.task.id)
+            elif task.task.status == 'In Progress':
+                progress_task_ids.append(task.task.id)
+            else:
+                done_task_ids.append(task.task.id)
+        
+        pending = MinimalTaskSerializer(Task.objects.filter(pk__in=pending_task_ids), many=True).data
+        progress = MinimalTaskSerializer(Task.objects.filter(pk__in=progress_task_ids), many=True).data
+        done = MinimalTaskSerializer(Task.objects.filter(pk__in=done_task_ids), many=True).data
+
+        return Response(status=status.HTTP_200_OK, data={
+            "pending": pending,
+            "progress": progress,
+            "done": done
+        })
+
 
 
 

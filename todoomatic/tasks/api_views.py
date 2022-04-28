@@ -21,6 +21,10 @@ class TaskViewSet(ModelViewSet):
         board_id = self.kwargs["board_id"]
         board = Board.objects.get(pk=board_id)
         serializer.save(board=board)
+        AssignTask.objects.create(
+            user = self.request.user,
+            task = Task.objects.get(pk=serializer.data['id'])
+        )
 
     def perform_destroy(self, instance):
         instance.deleted = True
@@ -34,8 +38,7 @@ class AssignTaskViewSet(ModelViewSet):
 
 
     def get_queryset(self):
-        task = self.kwargs["task_id"]
-        return AssignTask.objects.filter(task=task, deleted=False)
+        return AssignTask.objects.filter(user=self.request.user, deleted=False)
 
     def perform_create(self, serializer):
         task = self.kwargs["task_id"]

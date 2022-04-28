@@ -21,3 +21,4 @@ class AssignTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssignTask
         fields = "__all__"
+
