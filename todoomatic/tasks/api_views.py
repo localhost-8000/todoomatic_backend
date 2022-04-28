@@ -1,8 +1,8 @@
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
-from todoomatic.boards.models import Board
 
+from todoomatic.boards.models import Board
 from todoomatic.tasks.models import AssignTask, Task
 from todoomatic.tasks.serializers import AssignTaskSerializer, TaskSerializer
 
