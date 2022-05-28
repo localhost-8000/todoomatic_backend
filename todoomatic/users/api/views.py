@@ -55,6 +55,12 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericV
             "done": done
         })
 
+    @action(detail=False, methods=['get'])
+    def pending(self, request):
+        user_tasks = AssignTask.objects.filter(user=request.user, deleted=False, task__status="Pending")
+        pending_tasks = MinimalTaskSerializer([task.task for task in user_tasks], many=True).data
+
+        return Response(status=status.HTTP_200_OK, data=pending_tasks)
 
 
 

@@ -59,3 +59,13 @@ The following details how to deploy this application.
 ### Heroku
 
 See detailed [cookiecutter-django Heroku documentation](http://cookiecutter-django.readthedocs.io/en/latest/deployment-on-heroku.html).
+
+### APIs
+All requests except login and signup requires Token Authorization header
+
+`users/me/` -> current user data
+`users/tasks/` -> All tasks of the user
+`boards/` -> GET -> Get all boards
+`boards/` -> POST -> Create a board
+`boards/<board_id>/` -> Get board data with given id
+`boards/<board_id>/` -> PUT -> Update board with given id
